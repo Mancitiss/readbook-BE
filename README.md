@@ -1,3 +1,3 @@
-# readbook-BE
-#username: admin
-#password: admin
+Superuser:
+* username: admin
+* password: admin
