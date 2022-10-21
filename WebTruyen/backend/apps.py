@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ReadbookConfig(AppConfig):
+class BackendConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'readbook'
+    name = 'backend'
