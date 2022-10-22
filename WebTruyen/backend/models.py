@@ -1,9 +1,15 @@
+from ctypes import addressof
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 # Create your models here.
 class User(AbstractUser):
     avatar = models.ImageField(upload_to='uploads/%Y/%m')
+    intro = models.CharField(max_length=255, null=True)
+    nickname = models.CharField(max_length=255, null=True)
+    address = models.TextField(null=True, blank=True)
+    hobbies = models.TextField(null=True, blank=True)
+    phone = models.CharField(max_length=20, null=True)
 class TheLoai(models.Model):
     # tl_id
     tl_ten = models.CharField(max_length=255, null=False)
