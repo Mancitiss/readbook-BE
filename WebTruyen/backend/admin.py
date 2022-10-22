@@ -1,11 +1,11 @@
 from django.contrib import admin
-from .models import LichSu, BinhLuan, YeuThich, Chuong, Truyen, TheLoai, User
+from .models import History, Comment, LoveStory, Chapter, Story, Category, User
 # Register your models here.
-admin.site.register(LichSu)
-admin.site.register(BinhLuan)
-admin.site.register(YeuThich)
-admin.site.register(Chuong)
-admin.site.register(Truyen)
-admin.site.register(TheLoai)
+admin.site.register(History)
+admin.site.register(Comment)
+admin.site.register(LoveStory)
+admin.site.register(Chapter)
+admin.site.register(Story)
+admin.site.register(Category)
 admin.site.register(User)
 

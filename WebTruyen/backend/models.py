@@ -10,55 +10,52 @@ class User(AbstractUser):
     address = models.TextField(null=True, blank=True)
     hobbies = models.TextField(null=True, blank=True)
     phone = models.CharField(max_length=20, null=True)
-class TheLoai(models.Model):
+class Category(models.Model):
     # tl_id
-    tl_ten = models.CharField(max_length=255, null=False)
-
+    category_name = models.CharField(max_length=255, null=False)
     def __str__(self):
-        return self.tl_ten
+        return self.category_name
     
-class Truyen(models.Model):
+class Story(models.Model):
     # tr_id 
-    tl = models.ManyToManyField('TheLoai', blank=True, null=True)
-    tr_ten = models.CharField(max_length=255, null=False)
-    ngay_phat_hanh = models.DateTimeField(auto_now_add=True)
-    tac_gia = models.CharField(max_length=255, null=False)
-    anh = models.ImageField(upload_to='uploads/%Y/%m')
-    tong_so_tap = models.IntegerField()
-    us = models.ForeignKey(User, on_delete=models.CASCADE)
-    so_tap_da_phat_hanh = models.IntegerField()
-    lich_phat_hanh = models.TextField(null=True, blank=True)
-    so_luot_thich = models.IntegerField()
-    diem_danh_gia = models.DecimalField(max_digits=5, decimal_places=2)
-    so_luong_doc = models.IntegerField()
-    mo_ta = models.TextField(null=True, blank=True)
+    category_name = models.ManyToManyField('Category', blank=True, null=True)
+    story_name = models.CharField(max_length=255, null=False)
+    create_date = models.DateTimeField(auto_now_add=True)
+    author = models.CharField(max_length=255, null=False)
+    image = models.ImageField(upload_to='uploads/%Y/%m')
+    total_chapters = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    showtimes = models.TextField(null=True, blank=True)
+    likes = models.IntegerField()
+    rating = models.DecimalField(max_digits=5, decimal_places=2)
+    views = models.IntegerField()
+    introduce = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return self.tl_ten
+        return self.category_name
 
-class Chuong(models.Model):
+class Chapter(models.Model):
     # ch_id
-    tr = models.ForeignKey(Truyen, on_delete=models.CASCADE)
-    us = models.ForeignKey(User, on_delete=models.CASCADE)
-    stt_chuong = models.IntegerField()
-    ch_ten = models.CharField(max_length=255, null=False)
-    noi_dung = models.TextField(null=True, blank=True)
+    story = models.ForeignKey(Story, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    chapter_name = models.CharField(max_length=255, null=False)
+    content = models.TextField(null=True, blank=True)
 
-class YeuThich(models.Model):
-    us = models.ForeignKey(User, on_delete=models.CASCADE)
-    tr = models.ForeignKey(Truyen, on_delete=models.CASCADE)
-    thoi_gian = models.DateTimeField(auto_now_add=True)
+class LoveStory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    story = models.ForeignKey(Story, on_delete=models.CASCADE)
+    create_date = models.DateTimeField(auto_now_add=True)
 
-class BinhLuan(models.Model):
+class Comment(models.Model):
     # bl_id 
-    tr = models.ForeignKey(Truyen, on_delete=models.CASCADE)
-    us = models.ForeignKey(User, on_delete=models.CASCADE)
-    ch = models.ForeignKey(Chuong, on_delete=models.CASCADE)
-    noi_dung = models.TextField(null=True, blank=True)
-    thoi_gian = models.DateTimeField(auto_now_add=True)
+    story = models.ForeignKey(Story, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
+    content = models.TextField(null=True, blank=True)
+    create_date = models.DateTimeField(auto_now_add=True)
 
-class LichSu(models.Model):
-    us = models.ForeignKey(User, on_delete=models.CASCADE)
-    thoi_gian = models.DateTimeField(auto_now_add=True)
-    ch = models.ForeignKey(Chuong, on_delete=models.CASCADE)
-    tr = models.ForeignKey(Truyen, on_delete=models.CASCADE)
+class History(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    create_date = models.DateTimeField(auto_now_add=True)
+    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
+    story = models.ForeignKey(Story, on_delete=models.CASCADE)
