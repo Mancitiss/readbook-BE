@@ -1,34 +1,29 @@
 from rest_framework import serializers
-from backend.models import Truyen,Chuong
+from backend.models import Story,Chapter
 
 
-class ChuongSerializer(serializers.ModelSerializer):
+class ChapterSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Chuong
+        model = Chapter
         fields = ('id',
-                  'tr',
-                  'us',
-                  'stt_chuong',
-                  'ch_ten',
-                  'noi_dung')
-class TruyenSerializer(serializers.ModelSerializer):
+                  'story',
+                  'chapter_name',
+                  'content')
+class StorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Truyen
+        model = Story
         fields = ('id',
-                  'tl',
-                  'tr_ten',
-                  'ngay_phat_hanh',
-                  'tac_gia',
-                  'anh',
-                  'tong_so_tap',
-                  'us',
-                  'so_tap_da_phat_hanh',
-                  'lich_phat_hanh',
-                  'so_luot_thich',
-                  'diem_danh_gia',
-                  'so_luong_doc',
-                  'mo_ta'
+                  'category_name',
+                  'story_name',
+                  'create_date',
+                  'author',
+                  'image',
+                  'total_chapters',
+                  'user',
+                  'showtimes',
+                  'rating',
+                  'views',
+                  'introduce'
                   )
-
 
 

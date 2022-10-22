@@ -1,4 +1,4 @@
-"""WebTruyen URL Configuration
+"""WebStory URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.1/topics/http/urls/
@@ -18,6 +18,6 @@ from django.urls import path
 from api import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/chuong', views.chuong_list),
-    path('api/truyen', views.truyen_list)
+    path('api/chapter/', views.Chapter_list),
+    path('api/story/', views.Story_list)
 ]
