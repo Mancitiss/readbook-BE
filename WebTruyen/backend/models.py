@@ -13,10 +13,13 @@ class User(AbstractUser):
 class TheLoai(models.Model):
     # tl_id
     tl_ten = models.CharField(max_length=255, null=False)
+
+    def __str__(self):
+        return self.tl_ten
     
 class Truyen(models.Model):
     # tr_id 
-    tl = models.ForeignKey(TheLoai, on_delete=models.CASCADE)
+    tl = models.ManyToManyField('TheLoai', blank=True, null=True)
     tr_ten = models.CharField(max_length=255, null=False)
     ngay_phat_hanh = models.DateTimeField(auto_now_add=True)
     tac_gia = models.CharField(max_length=255, null=False)
@@ -29,6 +32,9 @@ class Truyen(models.Model):
     diem_danh_gia = models.DecimalField(max_digits=5, decimal_places=2)
     so_luong_doc = models.IntegerField()
     mo_ta = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.tl_ten
 
 class Chuong(models.Model):
     # ch_id
