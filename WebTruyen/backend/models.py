@@ -32,7 +32,6 @@ class Story(models.Model):
 
 class Chapter(models.Model):
     story = models.ForeignKey(Story, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     chapter_name = models.CharField(max_length=255, null=False)
     content = models.TextField(null=True, blank=True)
 
