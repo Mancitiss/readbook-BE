@@ -17,8 +17,9 @@ class User(AbstractUser):
 
 
 class Category(models.Model):
-    codeid = models.TextField(max_length=255, null=False, unique=True)
-    category_name = models.CharField(max_length=255, null=False, unique=False)
+
+    category_name = models.CharField(max_length=255, null=False, unique=True)
+    # category_description = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.category_name
