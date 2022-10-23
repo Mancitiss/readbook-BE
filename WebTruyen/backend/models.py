@@ -5,6 +5,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 # Create your models here.
+
+
 class User(AbstractUser):
     nickname = models.CharField(max_length=255, null=True)
     avatar = models.ImageField(upload_to='uploads/%Y/%m', null=True)
@@ -12,11 +14,16 @@ class User(AbstractUser):
     address = models.TextField(null=True, blank=True)
     hobbies = models.TextField(null=True, blank=True)
     phone = models.CharField(max_length=20, null=True)
+
+
 class Category(models.Model):
-    category_name = models.CharField(max_length=255, null=False, unique=True)
+    codeid = models.TextField(max_length=255, null=False, unique=True)
+    category_name = models.CharField(max_length=255, null=False, unique=False)
+
     def __str__(self):
         return self.category_name
-    
+
+
 class Story(models.Model):
     story_name = models.CharField(max_length=255, null=False)
     category_name = models.ManyToManyField('Category', blank=True)
@@ -30,23 +37,28 @@ class Story(models.Model):
     views = models.IntegerField(default=0)
     introduce = models.TextField(null=True, blank=True)
 
+
 class Chapter(models.Model):
     story = models.ForeignKey(Story, on_delete=models.CASCADE)
     chapter_name = models.CharField(max_length=255, null=False)
     content = models.TextField(null=True, blank=True)
+
 
 class SaveStory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     story = models.ForeignKey(Story, on_delete=models.CASCADE)
     create_date = models.DateTimeField(auto_now_add=True)
 
+
 class Comment(models.Model):
     story = models.ForeignKey(Story, on_delete=models.CASCADE)
-    previous_comment = models.ForeignKey('Comment', on_delete=models.CASCADE, null=True, blank=True)
+    previous_comment = models.ForeignKey(
+        'Comment', on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
     content = models.TextField(null=True, blank=True)
     create_date = models.DateTimeField(auto_now_add=True)
+
 
 class History(models.Model):
     story = models.ForeignKey(Story, on_delete=models.CASCADE)
@@ -54,11 +66,13 @@ class History(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
 
+
 class LoveComment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
     create_date = models.DateTimeField(auto_now_add=True)
     like_dislike = models.BooleanField(default=0)
+
 
 class BookReview(models.Model):
     story = models.ForeignKey(Story, on_delete=models.CASCADE)
@@ -66,4 +80,3 @@ class BookReview(models.Model):
     content = models.TextField(null=True, blank=True)
     create_date = models.DateTimeField(auto_now_add=True)
     like = models.IntegerField(default=0)
-    
