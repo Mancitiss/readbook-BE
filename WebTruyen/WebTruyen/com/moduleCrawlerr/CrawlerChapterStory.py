@@ -12,7 +12,7 @@ class CrawlerChapterStory():
             writer = csv.DictWriter(
                 f, fieldnames=CrawlerChapterStory.fieldNameStory)
             writer.writeheader()
-            CrawlerChapterStory.getNameStoryUserCategory()
+        CrawlerChapterStory.getNameStoryUserCategory()
 
     def getNameStoryUserCategory():
         with open('storyname.csv', mode='r') as csv_file:
