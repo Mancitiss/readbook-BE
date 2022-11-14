@@ -17,16 +17,13 @@ class UserViewSet(viewsets.ViewSet, generics.ListAPIView , generics.CreateAPIVie
     def get_permissions(self):
         if self.action == 'current_user':
             return [permissions.IsAuthenticated()]
+        if self.action == 'retrieve':
+            return [permissions.IsAuthenticated()]
         return [permissions.AllowAny()]
 
     @action(methods=['get'], detail=False, url_path='current-user')
     def current_user(self, request):
         return Response(self.serializer_class(request.user).data)
-
-    # def get_permissions(self):
-    #     if self.action == 'retrieve':
-    #         return [permissions.IsAuthenticated()]
-    #     return [permissions.AllowAny()]
 
 
 
