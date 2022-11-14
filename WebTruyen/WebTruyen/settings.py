@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'backend',
     'api.apps.ApiConfig',
     'rest_framework',
+    'oauth2_provider',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -138,3 +140,14 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:8081',
 )
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 2,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    )
+}
+
+# OAUTH2_PROVIDER = {
+#     'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'
+# }
