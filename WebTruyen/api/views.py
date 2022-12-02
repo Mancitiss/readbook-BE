@@ -32,6 +32,7 @@ def Chapter_list(request):
             return JsonResponse(tutorial_serializer.data, status=status.HTTP_201_CREATED)
         return JsonResponse(tutorial_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    
     elif request.method == 'DELETE':
         count = Chapter.objects.all().delete()
         return JsonResponse({'message': '{} Tutorials were deleted successfully!'.format(count[0])},
