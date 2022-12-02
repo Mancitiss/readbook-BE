@@ -1,11 +1,15 @@
 from django.urls import path, include
 from . import views
+from api import views as api
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register('categorys', views.CategoryViewSet)
-router.register('users', views.UserViewSet)
-
+router.register('categorys', api.CategoryViewSet)
+router.register('users', api.UserViewSet)
+router.register('bookreview/(?P<store_id>\w+)', api.BookReviewViewSet)
+router.register('store', api.StoreReviewViewSet)
+router.register('chapter/(?P<id>\d+)/(?P<chapter_id>\w+)', api.ChapterReviewViewSet)
+router.register('chapter', api.ChapterReviewViewSetall)
 urlpatterns = [
     path('', include(router.urls)),
 ]
