@@ -40,6 +40,7 @@ class Story(models.Model):
 
 
 class Chapter(models.Model):
+    index = models.IntegerField(default=0)
     story = models.ForeignKey(Story, on_delete=models.CASCADE)
     chapter_name = models.CharField(max_length=255, null=False)
     content = models.TextField(null=True, blank=True)
