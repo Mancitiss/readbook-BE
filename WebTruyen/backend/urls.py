@@ -10,6 +10,7 @@ router.register('bookreview/(?P<store_id>\w+)', api.BookReviewViewSet)
 router.register('store', api.StoreReviewViewSet)
 router.register('chapter/(?P<id>\d+)/(?P<chapter_id>\w+)', api.ChapterReviewViewSet)
 router.register('chapter', api.ChapterReviewViewSetall)
+
 urlpatterns = [
     path('', include(router.urls)),
 ]
