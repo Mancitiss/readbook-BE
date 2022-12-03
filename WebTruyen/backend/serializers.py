@@ -30,4 +30,4 @@ class StorySerializer(ModelSerializer):
 class ChapterSerializer(ModelSerializer):
     class Meta:
         model = Chapter
-        fields = ["story", "chapter_name", "content"]
+        fields = ["index", "story", "chapter_name", "content"]
