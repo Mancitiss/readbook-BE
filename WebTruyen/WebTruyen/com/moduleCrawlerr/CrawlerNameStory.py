@@ -2,6 +2,7 @@ import requests
 import csv
 from bs4 import BeautifulSoup
 import time
+from .CrawlerChapterStory import CrawlerChapterStory
 
 
 class CrawlerNameStory():
@@ -21,6 +22,7 @@ class CrawlerNameStory():
             for row in csv_reader:
 
                 CrawlerNameStory.getName(row)
+
                 # time.sleep(1)
 
     def getName(row):
@@ -30,15 +32,20 @@ class CrawlerNameStory():
             soup = BeautifulSoup(x.text, "html.parser")
             elements = soup.select('.item')
             arrayList = []
+            index = 0
             for x in elements:
-                print(x.text)
-                objectItem = {}
-                objectItem['story_name'] = x.text
-                objectItem['category_name'] = row['id']
-                objectItem['linkstory'] = x.select_one('a').attrs['href']
-                objectItem['image'] = x.select_one('img').attrs['src']
-                arrayList.append(objectItem)
+                if index <= 5:
+                    index = index +1
+                    print(x.text)
+                    objectItem = {}
+                    objectItem['story_name'] = x.text
+                    objectItem['category_name'] = row['id']
+                    objectItem['linkstory'] = x.select_one('a').attrs['href']
+                    objectItem['image'] = x.select_one('img').attrs['src']
+                    arrayList.append(objectItem)
+                    CrawlerChapterStory.getName(objectItem)
             CrawlerNameStory.inserData(arrayList)
+
         except:
             print('Exception')
 

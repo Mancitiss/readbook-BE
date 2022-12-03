@@ -6,6 +6,6 @@ from .CrawlerChapterStory import CrawlerChapterStory
 class InitCraler():
     def init():
         print('InitCraler ')
-        # CralwerCategory.init()
+        CralwerCategory.init()
         # CrawlerNameStory.init()
-        CrawlerChapterStory.init()
+        # CrawlerChapterStory.init()

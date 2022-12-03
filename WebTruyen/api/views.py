@@ -5,61 +5,76 @@ from django.shortcuts import render
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework import status
-
-from backend.models import Chapter,Story
-from api.serializers import ChapterSerializer,StorySerializer
+from rest_framework.parsers import MultiPartParser
+from rest_framework.decorators import action
+from backend.models import Chapter,Story,Category,User,BookReview
+from api.serializers import ChapterSerializer,StorySerializer,CategorySerializer,UserSerializer,BookreviewSerializer
 from rest_framework.decorators import api_view
+from rest_framework import viewsets, permissions, generics,response
+from rest_framework.pagination import PageNumberPagination
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 1
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
 
 
-@api_view(['GET', 'POST', 'DELETE'])
-def Chapter_list(request):
-    if request.method == 'GET':
-        tutorials = Chapter.objects.all()
+class UserViewSet(viewsets.ViewSet, generics.ListAPIView , generics.CreateAPIView, generics.RetrieveAPIView):
+    queryset = User.objects.filter(is_active=True)
+    serializer_class = UserSerializer
+    parser_classes = [MultiPartParser]
 
-        title = request.query_params.get('title', None)
-        if title is not None:
-            tutorials = tutorials.filter(title__icontains=title)
+    # def get_permissions(self):
+    #     if self.action == 'current_user':
+    #         return [permissions.IsAuthenticated()]
+    #     if self.action == 'retrieve':
+    #         return [permissions.IsAuthenticated()]
+    #     return [permissions.AllowAny()]
 
-        tutorials_serializer = ChapterSerializer(tutorials, many=True)
-        return JsonResponse(tutorials_serializer.data, safe=False)
-        # 'safe=False' for objects serialization
+    @action(methods=['get'], detail=False, url_path='current-user')
+    def current_user(self, request):
+        return Response(self.serializer_class(request.user).data)
 
-    elif request.method == 'POST':
-        tutorial_data = JSONParser().parse(request)
-        tutorial_serializer = ChapterSerializer(data=tutorial_data)
-        if tutorial_serializer.is_valid():
-            tutorial_serializer.save()
-            return JsonResponse(tutorial_serializer.data, status=status.HTTP_201_CREATED)
-        return JsonResponse(tutorial_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class CategoryViewSet(viewsets.ModelViewSet):
 
-    elif request.method == 'DELETE':
-        count = Chapter.objects.all().delete()
-        return JsonResponse({'message': '{} Tutorials were deleted successfully!'.format(count[0])},
-                            status=status.HTTP_204_NO_CONTENT)
+    queryset = Category.objects.filter()
+    serializer_class = CategorySerializer
 
-@api_view(['GET', 'POST', 'DELETE'])
-def Story_list(request):
-    if request.method == 'GET':
-        tutorials = Story.objects.all()
+class BookReviewViewSet(viewsets.ModelViewSet):
 
-        title = request.query_params.get('title', None)
-        if title is not None:
-            tutorials = tutorials.filter(title__icontains=title)
+    queryset = BookReview.objects.filter()
+    serializer_class = BookreviewSerializer
 
-        tutorials_serializer = StorySerializer(tutorials, many=True)
-        return JsonResponse(tutorials_serializer.data, safe=False)
-        # 'safe=False' for objects serialization
 
-    elif request.method == 'POST':
-        tutorial_data = JSONParser().parse(request)
-        tutorial_serializer = StorySerializer(data=tutorial_data)
-        if tutorial_serializer.is_valid():
-            tutorial_serializer.save()
-            return JsonResponse(tutorial_serializer.data, status=status.HTTP_201_CREATED)
-        return JsonResponse(tutorial_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get_queryset(self):
+        obj_id = self.kwargs['store_id']
+        if obj_id!='all':
+            query = BookReview.objects.filter(story=obj_id)
+        else:
+            query = BookReview.objects.all()
+        return query
+class StoreReviewViewSet(viewsets.ModelViewSet):
 
-    elif request.method == 'DELETE':
-        count = Story.objects.all().delete()
-        return JsonResponse({'message': '{} Tutorials were deleted successfully!'.format(count[0])},
-                            status=status.HTTP_204_NO_CONTENT)
+    queryset = Story.objects.filter()
+    serializer_class = StorySerializer
 
+class ChapterReviewViewSet(viewsets.ModelViewSet):
+   # pagination_class = StandardResultsSetPagination
+    queryset = Chapter.objects.filter()
+    serializer_class = ChapterSerializer
+    def get_queryset(self):
+        obj_id = self.kwargs['id']
+        obj_id1 = self.kwargs['chapter_id']
+        if obj_id:
+            query = Chapter.objects.filter(story=obj_id)
+        if obj_id1!='all':
+            query = query.filter(id=obj_id1)
+          #  if obj_id1:
+           #
+        # do something with data
+        return query
+class ChapterReviewViewSetall(viewsets.ModelViewSet):
+   # pagination_class = StandardResultsSetPagination
+   # pagination_class = StandardResultsSetPagination
+    queryset = Chapter.objects.filter()
+    serializer_class = ChapterSerializer
