@@ -1,6 +1,6 @@
 
 from rest_framework.serializers import ModelSerializer
-from .models import Category, User
+from .models import Category, User, Story, Chapter
 
 class UserSerializer(ModelSerializer):
     class Meta:
@@ -20,3 +20,14 @@ class CategorySerializer(ModelSerializer):
     class Meta:
         model = Category
         fields = ["category_name"]
+
+class StorySerializer(ModelSerializer):
+    class Meta:
+        model = Story
+        fields = ["story_name", "category_name", "create_date", "author", "image", "total_chapters", "user", "showtimes", "rating", "views", "introduce"]
+
+
+class ChapterSerializer(ModelSerializer):
+    class Meta:
+        model = Chapter
+        fields = ["story", "chapter_name", "content"]

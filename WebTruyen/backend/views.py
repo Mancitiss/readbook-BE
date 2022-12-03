@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework import viewsets, permissions, generics,response
 from rest_framework.decorators import action
-from .models import Category, User
-from .serializers import CategorySerializer, UserSerializer
+from .models import Category, User, Story, Chapter
+from .serializers import CategorySerializer, UserSerializer, StorySerializer, ChapterSerializer
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 
@@ -35,10 +35,12 @@ class UserViewSet(viewsets.ViewSet, generics.ListAPIView , generics.CreateAPIVie
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.filter()
     serializer_class = CategorySerializer
-    #permission_classes = [permissions.IsAuthenticated]
 
-    # def get_permissions(self):
-    #     if self.action == 'list':
-    #         return [permissions.AllowAny()]
-    #     else:
-    #         return [permissions.IsAuthenticated()]
+
+class StoryViewSet(viewsets.ModelViewSet):
+    queryset = Story.objects.filter()
+    serializer_class = StorySerializer
+
+class ChapterViewSet(viewsets.ModelViewSet):
+    queryset = Chapter.objects.filter()
+    serializer_class = ChapterSerializer
