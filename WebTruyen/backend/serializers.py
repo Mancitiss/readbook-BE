@@ -19,7 +19,7 @@ class UserSerializer(ModelSerializer):
 class CategorySerializer(ModelSerializer):
     class Meta:
         model = Category
-        fields = ["category_name"]
+        fields = "__all__"
 
 class StorySerializer(ModelSerializer):
     class Meta:

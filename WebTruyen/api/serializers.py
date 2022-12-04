@@ -27,7 +27,7 @@ class StorySerializer(serializers.ModelSerializer):
 class CategorySerializer(ModelSerializer):
     class Meta:
         model = Category
-        fields = ["category_name"]
+        fields = '__all__'
 class BookreviewSerializer(ModelSerializer):
     class Meta:
         model = BookReview
