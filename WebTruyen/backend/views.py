@@ -41,6 +41,7 @@ class StoryViewSet(viewsets.ModelViewSet):
     queryset = Story.objects.filter()
     serializer_class = StorySerializer
 
+
 class ChapterViewSet(viewsets.ModelViewSet):
     queryset = Chapter.objects.filter()
     serializer_class = ChapterSerializer

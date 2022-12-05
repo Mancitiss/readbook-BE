@@ -24,7 +24,7 @@ class CategorySerializer(ModelSerializer):
 class StorySerializer(ModelSerializer):
     class Meta:
         model = Story
-        fields = ["story_name", "category_name", "create_date", "author", "image", "total_chapters", "user", "showtimes", "rating", "views", "introduce"]
+        fields = ["id", "story_name", "category_name", "create_date", "author", "image", "total_chapters", "user", "showtimes", "rating", "views", "introduce"]
 
 
 class ChapterSerializer(ModelSerializer):
