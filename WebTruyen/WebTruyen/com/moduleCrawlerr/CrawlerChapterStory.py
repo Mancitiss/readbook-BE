@@ -2,6 +2,7 @@ import requests
 import csv
 from bs4 import BeautifulSoup
 import time
+from backend.models import Chapter, Comment, Story
 
 
 class CrawlerChapterStory():
@@ -33,10 +34,11 @@ class CrawlerChapterStory():
             arrayList = []
             for x in elements:
                 if (index <= 5):
-                    index = index +1
+                    index = index + 1
                     objectItem = {}
                     objectItem['story'] = row['story_name']
-                    objectItem['chapter_name'] = x.select_one('a').attrs['title']
+                    objectItem['chapter_name'] = x.select_one(
+                        'a').attrs['title']
                     objectItem['linkstory'] = x.select_one('a').attrs['href']
                     x = requests.get(objectItem['linkstory'])
                     soup = BeautifulSoup(x.text, "html.parser")
@@ -44,15 +46,32 @@ class CrawlerChapterStory():
                     objectItem['content'] = element.text
                     # print(objectItem)
                     arrayList.append(objectItem)
-                    CrawlerChapterStory.getName(objectItem)
-            CrawlerChapterStory.inserData(arrayList)
-                   
+                    CrawlerChapterStory.inserData(
+                        row['category_name'], objectItem)
+                    print(objectItem)
+                    # CrawlerChapterStory.getName(objectItem)
+
         except:
             print("An exception occurred")
 
-    def inserData(data):
-        with open('chapter.csv', 'a', encoding='UTF8', newline='') as f:
-            writer = csv.DictWriter(
-                f, fieldnames=CrawlerChapterStory.fieldNameStory)
-            for row in data:
-                writer.writerow(row)
+    def inserData(name, data):
+        print(data)
+        try:
+            print('run')
+            oldKey = Chapter.objects.get(chapter_name=data['chapter_name'])
+            print('key')
+        except:
+            topic1 = Chapter()
+            item = Story.objects.filter(story_name="Bí Ẩn Đôi Long Phượng")
+
+            Chapter.objects.bulk_create([
+                Story(story_name="Bí Ẩn Đôi Long Phượng"),
+                Chapter(chapter_name='chapter name'),
+                Chapter(content='content'), ]
+            )
+
+            # topic1.story_id = 1
+            topic1.story_name_id = 1
+
+            # topic1.story.add(item)
+            topic1.save()

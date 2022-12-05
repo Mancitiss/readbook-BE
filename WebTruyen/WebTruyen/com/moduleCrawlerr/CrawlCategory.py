@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 import requests
 import csv
 from .CrawlerNameStory import CrawlerNameStory
+from backend.models import Category, Chapter, Comment
 
 
 class CralwerCategory():
@@ -21,22 +22,26 @@ class CralwerCategory():
         elements = soup.select('#hot-select option')
         array = []
         index = 0
-        for x in elements:
+        for item in elements:
             objItem = {}
             if index <= 5:
                 index = index + 1
-                if (x.attrs['value'] != 'all'):
-                    objItem['name'] = x.text
-                    objItem['id'] = x.attrs['value']
+                if (item.attrs['value'] != 'all'):
+                    objItem['name'] = item.text
+                    objItem['id'] = item.attrs['value']
                     array.append(objItem)
-                    print('Get name Category')
-                    print(objItem['name'])
+                    print('---- Get name Category', objItem['name'],'----')
+                    CralwerCategory.inserData(objItem)
                     CrawlerNameStory.getName(objItem)
-        CralwerCategory.inserData(array)
 
-    def inserData(data):
-        fieldnames = ['id', 'name']
-        with open('category.csv', 'w', encoding='UTF8', newline='') as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerows(data)
+    def inserData(row):
+        try:
+            oldKey = Category.objects.get(category_name=row['name'])
+        except:
+            if (row['name']):
+                try:
+                    topic = Category()
+                    Category.objects.create(category_name=row['name'])
+                    topic.save()
+                except:
+                    print('')

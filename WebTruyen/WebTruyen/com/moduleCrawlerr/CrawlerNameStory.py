@@ -3,6 +3,8 @@ import csv
 from bs4 import BeautifulSoup
 import time
 from .CrawlerChapterStory import CrawlerChapterStory
+from backend.models import Story, Category
+from django.utils import timezone
 
 
 class CrawlerNameStory():
@@ -23,7 +25,7 @@ class CrawlerNameStory():
 
                 CrawlerNameStory.getName(row)
 
-                # time.sleep(1)
+                time.sleep(1)
 
     def getName(row):
         url = "https://truyenfull.vn/ajax.php?type=hot_select&id="+row['id']
@@ -34,24 +36,39 @@ class CrawlerNameStory():
             arrayList = []
             index = 0
             for x in elements:
-                if index <= 5:
-                    index = index +1
-                    print(x.text)
+                if index <= 10:
+                    index = index + 1
+                    print('Story name:', x.text)
                     objectItem = {}
                     objectItem['story_name'] = x.text
                     objectItem['category_name'] = row['id']
                     objectItem['linkstory'] = x.select_one('a').attrs['href']
                     objectItem['image'] = x.select_one('img').attrs['src']
                     arrayList.append(objectItem)
+                    CrawlerNameStory.inserData(row['name'], objectItem)
                     CrawlerChapterStory.getName(objectItem)
-            CrawlerNameStory.inserData(arrayList)
+                    time.sleep(1)
 
         except:
-            print('Exception')
+            print('Exception 1')
 
-    def inserData(data):
-        with open('storyname.csv', 'a', encoding='UTF8', newline='') as f:
-            writer = csv.DictWriter(
-                f, fieldnames=CrawlerNameStory.fieldNameStory)
-            for row in data:
-                writer.writerow(row)
+    def inserData(type, data):
+        # print(type, data)
+
+        try:
+            existItem = Story.objects.get(story_name=data['story_name'])
+            # print('errrrrrrrr')
+
+        except:
+            # print('error')
+         
+            topic1 = Story(story_name=data['story_name'],
+                           user_id = 1,
+                           author = "admin",
+                           image = data['image'],
+                           total_chapters = 50,
+                           showtimes = '',
+                           rating = 5,
+                           views = 0,
+                           introduce = '')
+            topic1.save()
