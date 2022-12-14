@@ -11,6 +11,8 @@ router.register('story', api.StoreReviewViewSet)
 router.register('chapter/(?P<id>\d+)/(?P<chapter_id>\w+)', api.ChapterReviewViewSet)
 router.register('chapter', api.ChapterReviewViewSetall)
 router.register('story', views.StoryViewSet)
+router.register('searchcategory/(?P<searchkey>\w+)', api.SearchCategory)
+router.register('searstoryname/(?P<searchkey>\w+)', api.SearchStoryName)
 urlpatterns = [
     path('', include(router.urls)),
 ]
