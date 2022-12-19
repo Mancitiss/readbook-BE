@@ -104,4 +104,4 @@ class My_saveViewSet(viewsets.ModelViewSet):
     serializer_class = StorySerializer 
     def get_queryset(self):
         obj_id = self.kwargs['story_id']
-        return Story.objects.raw('SELECT story_id as id, id as aaa from backend_savestory where user_id = ' + obj_id + ' order by aaa desc')          
+        return Story.objects.raw('SELECT * from backend_story where id in (select story_id from backend_savestory where user_id = ' + obj_id + ' order by id desc)')          
