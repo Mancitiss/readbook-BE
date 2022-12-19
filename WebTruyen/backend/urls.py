@@ -15,6 +15,8 @@ router.register('story-new', views.Story_newViewSet)
 router.register('list-story-new', views.List_story_newViewSet)
 router.register('get_chapter/(?P<story_id>\w+)', views.Get_ChapterViewSet)
 
+router.register('searchcategory/(?P<searchkey>\w+)', api.SearchCategory)
+router.register('searstoryname/(?P<searchkey>\w+)', api.SearchStoryName)
 urlpatterns = [
     path('', include(router.urls)),
 ]
