@@ -1,6 +1,6 @@
 
 from rest_framework.serializers import ModelSerializer
-from .models import Category, User, Story, Chapter, CaBook
+from .models import Category, User, Story, Chapter, CaBook, History, SaveStory
 
 class UserSerializer(ModelSerializer):
     class Meta:
@@ -42,3 +42,12 @@ class CaBookSerializer(ModelSerializer):
         model = CaBook
         fields = "__all__"   
 
+class HistorySerializer(ModelSerializer):
+    class Meta:
+        model = History
+        fields = "__all__"
+
+class SaveStorySerializer(ModelSerializer):
+    class Meta:
+        model = SaveStory
+        fields = "__all__"
