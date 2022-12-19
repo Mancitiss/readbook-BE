@@ -4,10 +4,7 @@ from rest_framework.serializers import ModelSerializer
 class ChapterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chapter
-        fields = ('id',
-                  'story',
-                  'chapter_name',
-                  'content')
+        fields = '__all__'
 class StorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Story

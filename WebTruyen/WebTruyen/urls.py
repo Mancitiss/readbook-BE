@@ -52,12 +52,12 @@ if settings.DEBUG:
 
 
 
-@thread6.threaded()
-def thread_crawler_story():
-    print('run thread')
-    InitCraler.init()
-try:
+# @thread6.threaded()
+# def thread_crawler_story():
+#     print('run thread')
+#     InitCraler.init()
+# try:
    
-    thread6.run_threaded(thread_crawler_story)
-except:
-    print("Error: unable to start thread")
+#     thread6.run_threaded(thread_crawler_story)
+# except:
+#     print("Error: unable to start thread")

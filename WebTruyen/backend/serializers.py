@@ -21,6 +21,11 @@ class CategorySerializer(ModelSerializer):
         model = Category
         fields = "__all__"
 
+class Category1Serializer(ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ["id"]
+
 class StorySerializer(ModelSerializer):
     class Meta:
         model = Story
@@ -30,4 +35,4 @@ class StorySerializer(ModelSerializer):
 class ChapterSerializer(ModelSerializer):
     class Meta:
         model = Chapter
-        fields = ["index", "story", "chapter_name", "content"]
+        fields = "__all__"

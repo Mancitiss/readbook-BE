@@ -2,10 +2,10 @@ from django.shortcuts import render
 from rest_framework import viewsets, permissions, generics,response
 from rest_framework.decorators import action
 from .models import Category, User, Story, Chapter
-from .serializers import CategorySerializer, UserSerializer, StorySerializer, ChapterSerializer
+from .serializers import CategorySerializer, UserSerializer, StorySerializer, ChapterSerializer, Category1Serializer
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
-
+from django.db.models.expressions import RawSQL
 
 # Create your views here.
 
@@ -40,8 +40,25 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class StoryViewSet(viewsets.ModelViewSet):
     queryset = Story.objects.filter()
     serializer_class = StorySerializer
+class Story_newViewSet(viewsets.ModelViewSet):
+    queryset = Story.objects
+    serializer_class = StorySerializer 
+    def get_queryset(self):
+        return Story.objects.raw('SELECT id from backend_story order by id desc limit 1')
 
 
 class ChapterViewSet(viewsets.ModelViewSet):
     queryset = Chapter.objects.filter()
     serializer_class = ChapterSerializer
+class Get_ChapterViewSet(viewsets.ModelViewSet):
+    queryset = Chapter.objects.filter()
+    serializer_class = ChapterSerializer 
+    def get_queryset(self):
+        obj_id = self.kwargs['story_id']
+        return Chapter.objects.raw('SELECT * from backend_chapter where story_id = ' + obj_id + ' order by [index] desc')
+
+class List_story_newViewSet(viewsets.ModelViewSet):
+    queryset = Story.objects
+    serializer_class = StorySerializer 
+    def get_queryset(self):
+        return Story.objects.raw('SELECT id from backend_story order by id desc limit 20')
