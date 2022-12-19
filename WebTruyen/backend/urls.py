@@ -17,6 +17,10 @@ router.register('get_chapter/(?P<story_id>\w+)', views.Get_ChapterViewSet)
 
 router.register('searchcategory/(?P<searchkey>\w+)', api.SearchCategory)
 router.register('searstoryname/(?P<searchkey>\w+)', api.SearchStoryName)
+router.register('get-story-catagory/(?P<story_id>\w+)', views.Get_Story_CatagoryViewSet)
+router.register('get-story-history/(?P<story_id>\w+)', views.Get_Story_HistoryViewSet)
+
+
 urlpatterns = [
     path('', include(router.urls)),
 ]

@@ -83,3 +83,7 @@ class BookReview(models.Model):
     content = models.TextField(null=True, blank=True)
     create_date = models.DateTimeField(auto_now_add=True)
     like = models.IntegerField(default=0)
+
+class CaBook(models.Model):
+    story_id = models.IntegerField(default=0)
+    category_id = models.IntegerField(default=0)

@@ -1,6 +1,6 @@
 
 from rest_framework.serializers import ModelSerializer
-from .models import Category, User, Story, Chapter
+from .models import Category, User, Story, Chapter, CaBook
 
 class UserSerializer(ModelSerializer):
     class Meta:
@@ -36,3 +36,9 @@ class ChapterSerializer(ModelSerializer):
     class Meta:
         model = Chapter
         fields = "__all__"
+
+class CaBookSerializer(ModelSerializer):
+    class Meta:
+        model = CaBook
+        fields = "__all__"   
+
