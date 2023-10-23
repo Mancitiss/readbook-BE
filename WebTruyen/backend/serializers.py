@@ -1,6 +1,9 @@
 
 from rest_framework.serializers import ModelSerializer
-from .models import Category, User, Story, Chapter, CaBook, History, SaveStory
+
+
+from .models import Category, User, Story, Chapter, CaBook, History, SaveStory, BookReview
+import jwt
 
 class UserSerializer(ModelSerializer):
     class Meta:
@@ -51,3 +54,8 @@ class SaveStorySerializer(ModelSerializer):
     class Meta:
         model = SaveStory
         fields = "__all__"
+
+class BookreviewSerializer(ModelSerializer):
+    class Meta:
+        model = BookReview
+        fields = ["story","user","content","create_date","like"]

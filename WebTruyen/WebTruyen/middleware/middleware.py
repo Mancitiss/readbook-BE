@@ -1,0 +1,97 @@
+import json
+import re
+from django.http import HttpResponse
+from django.utils.deprecation import MiddlewareMixin
+import secrets
+import string
+import datetime
+
+import pytz
+from backend.models import User
+from backend.utils import verify_google_credential_jwt
+from oauth2_provider.models import get_access_token_model, get_application_model
+from oauth2_provider.settings import oauth2_settings
+from oauth2_provider.models import AccessToken
+
+
+class GoogleLoginMiddleware(MiddlewareMixin):
+    def process_request(self, request):
+        if re.match('^/login/', request.path):
+            print("login")
+            # check if request is post
+            if request.method == 'POST':
+                print('post')
+                # check if request is from google
+                if request.POST.get('provider') == 'google':
+                    # check if token is valid
+                    result = verify_google_credential_jwt(request.POST.get('credential'))
+                    print('google')
+                    if result is None:
+                        response = HttpResponse()
+                        response.status_code = 401
+                        return response
+                    # user is valid, check if user is in database, if not create account, if yes, return user
+                    # check if user is in database
+                    try:
+                        user = User.objects.get(email=result['email'])
+                    except Exception as e:
+                        print(e)
+                        # create new user
+                        user = User.objects.create_user(
+                            username=result['email'],
+                            email=result['email'],
+                            # password = secure random string, use the random string of python
+                            password=''.join(secrets.choice(string.ascii_uppercase + string.digits) for i in range(8)),
+                            first_name=result['given_name'],
+                            last_name=result['family_name'],
+                        )
+                        user.save()
+                    finally:
+                        response = HttpResponse()
+                        response.status_code = 200
+                        response['Access-Control-Allow-Origin'] = request.META.get('HTTP_ORIGIN')
+                        try:
+                            dicts = {}
+                            dicts['username'] = user.username
+                            dicts['email'] = user.email
+                            dicts['first_name'] = user.first_name
+                            dicts['last_name'] = user.last_name
+                            dicts['is_active'] = user.is_active
+                            dicts['is_staff'] = user.is_staff
+                            dicts['is_superuser'] = user.is_superuser
+                            dicts['last_login'] = user.last_login
+                            dicts['date_joined'] = user.date_joined.strftime("%Y-%m-%d %H:%M:%S")
+                            token = self.create_access_token(user)
+                            dicts['access_token'] = token
+                            print(dicts)
+                            response.content = json.dumps(dicts, skipkeys=True, allow_nan=True)
+                        except Exception as e:
+                            print(e)
+                        print('im not alive')
+                        return response
+    
+    def create_access_token(self, user):
+        # Custom token creation logic
+        # You can customize the token creation process here
+        try:
+            token_model = get_access_token_model()
+            token: AccessToken = token_model.objects.get_or_create(
+                user=user,
+                application=get_application_model().objects.first(),
+                expires=datetime.datetime.now(pytz.timezone('Asia/Ho_Chi_Minh')) + datetime.timedelta(seconds=3600)
+            )
+            if token.token == None or token.token == '':
+                raise Exception('token is null')
+            return token.token
+        except Exception as e:
+            for i in e.args:
+                print(i, end='')
+                print("*")
+                if i == 'UNIQUE constraint failed: oauth2_provider_accesstoken.token':
+                    print('hit')
+                    token: AccessToken = token_model.objects.get(user=user)
+                    if token.token == None or token.token == '':
+                        token.token = secrets.token_urlsafe(30) 
+                    token.expires = datetime.datetime.now(pytz.timezone('Asia/Ho_Chi_Minh')) + datetime.timedelta(seconds=3600)
+                    token.save()
+                    return token.token

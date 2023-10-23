@@ -6,7 +6,6 @@ from django.db import models
 
 # Create your models here.
 
-
 class User(AbstractUser):
     nickname = models.CharField(max_length=255, null=True)
     avatar = models.ImageField(upload_to='uploads/%Y/%m', null=True)
